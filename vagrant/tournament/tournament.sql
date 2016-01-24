@@ -1,4 +1,10 @@
 -- Table definitions for the tournament project.
+
+-- TODO: add a bye system so that odd numbers of players can enter
+-- TODO: add other tables to store player match records and numerous tournaments.
+
+-- delete the DB if it exists
+DROP DATABASE IF EXISTS tournament;
 -- Create the tournament database
 CREATE DATABASE tournament;
 -- connect to the cournament database
@@ -19,15 +25,8 @@ CREATE TABLE matches(
 
 -- count regitered players view
 CREATE OR REPLACE VIEW count_players AS
-    SELECT * FROM players;
-
--- create the view to select winner from the database
-CREATE OR REPLACE VIEW tournament_winner AS
-    SELECT matches.winner, players.name, COUNT(*) AS wins
-        FROM matches
-        LEFT OUTER JOIN players ON matches.winner = plaers.player_id
-        GROUP BY winner
-        ORDER BY wins DESC;
+    SELECT COUNT(*) AS reg_players
+    FROM players;
 
 -- create the view for player standings
 CREATE OR REPLACE VIEW current_standings AS
@@ -42,23 +41,8 @@ CREATE OR REPLACE VIEW current_standings AS
     ORDER BY wins DESC,
              match_count ASC;
 
-
-
-
-/* Poulate tables */
-
--- populate players table
-INSERT INTO players (player_name) VALUES ('Bob');
-INSERT INTO players (player_name) VALUES ('Tom');
-INSERT INTO players (player_name) VALUES ('John');
-INSERT INTO players (player_name) VALUES ('Barock');
-INSERT INTO players (player_name) VALUES ('James');
-INSERT INTO players (player_name) VALUES ('Tammmy');
-INSERT INTO players (player_name) VALUES ('Tim');
-INSERT INTO players (player_name) VALUES ('Harry');
-
--- populate matches table
-INSERT INTO matches (winner, loser) VALUES (1,2);
-INSERT INTO matches (winner, loser) VALUES (3,4);
-INSERT INTO matches (winner, loser) VALUES (5,6);
-INSERT INTO matches (winner, loser) VALUES (7,8);
+-- create a view to randomly seed the matches before the first round.
+CREATE OR REPLACE VIEW seed_initial_round AS
+    SELECT *
+    FROM  players
+    ORDER BY random();

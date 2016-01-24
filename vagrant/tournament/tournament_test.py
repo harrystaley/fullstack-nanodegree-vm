@@ -10,27 +10,27 @@ import tournament
 
 def test_delete_matches():
     '''This function tests to see if matches can be deleted'''
-    delete_matches()
+    tournament.delete_matches()
     print "1. Old matches can be deleted."
 
 
 def test_delete():
     '''This function tests if player records can be deleted.'''
-    delete_matches()
-    delete_players()
+    tournament.delete_matches()
+    tournament.delete_players()
     print "2. Player records can be deleted."
 
 
 def test_count():
     '''This function tests if the the counts return properly
     from the database.'''
-    delete_matches()
-    delete_players()
-    c = count_players()
-    if c == '0':
+    tournament.delete_matches()
+    tournament.delete_players()
+    c_value = tournament.count_players()
+    if c_value == '0':
         raise TypeError(
             "count_players() should return numeric zero, not string '0'.")
-    if c != 0:
+    if c_value != 0:
         raise ValueError("After deleting, count_Players should return zero.")
     print "3. After deleting, count_players() returns zero."
 
@@ -38,11 +38,11 @@ def test_count():
 def test_register():
     '''this funciton tests if the player registration works correctly by
     returning the proper number of players registered.'''
-    delete_matches()
-    delete_players()
-    register_player("Chandra Nalaar")
-    c = count_players()
-    if c != 1:
+    tournament.delete_matches()
+    tournament.delete_players()
+    tournament.register_player("Chandra Nalaar")
+    c_value = tournament.count_players()
+    if c_value != 1:
         raise ValueError(
             "After one player registers, count_players() should be 1.")
     print "4. After registering a player, count_players() returns 1."
@@ -50,19 +50,19 @@ def test_register():
 
 def test_register_count_delete():
     '''This function tests to see if players can be registered and deleted.'''
-    delete_matches()
-    delete_players()
-    register_player("Markov Chaney")
-    register_player("Joe Malik")
-    register_player("Mao Tsu-hsi")
-    register_player("Atlanta Hope")
-    c = count_players()
-    if c != 4:
+    tournament.delete_matches()
+    tournament.delete_players()
+    tournament.register_player("Markov Chaney")
+    tournament.register_player("Joe Malik")
+    tournament.register_player("Mao Tsu-hsi")
+    tournament.register_player("Atlanta Hope")
+    c_value = tournament.count_players()
+    if c_value != 4:
         raise ValueError(
             "After registering four players, count_players should be 4.")
-    delete_players()
-    c = count_players()
-    if c != 0:
+    tournament.delete_players()
+    c_value = tournament.count_players()
+    if c_value != 0:
         raise ValueError("After deleting, count_players should return zero.")
     print "5. Players can be registered and deleted."
 
@@ -70,11 +70,11 @@ def test_register_count_delete():
 def test_standings_before_matches():
     '''This function tests if newly registred players appear in the
     standings without any matches'''
-    delete_matches()
-    delete_players()
-    register_player("Melpomene Murray")
-    register_player("Randy Schwartz")
-    standings = player_standings()
+    tournament.delete_matches()
+    tournament.delete_players()
+    tournament.register_player("Melpomene Murray")
+    tournament.register_player("Randy Schwartz")
+    standings = tournament.player_standings()
     if len(standings) < 2:
         raise ValueError("Players should appear in player_standings even "
                          "before they have played any matches.")
@@ -96,17 +96,17 @@ def test_standings_before_matches():
 def test_report_matches():
     '''This function tests to see if after a match the players' standing
     have been updated.'''
-    delete_matches()
-    delete_players()
-    register_player("Bruno Walton")
-    register_player("Boots O'Neal")
-    register_player("Cathy Burton")
-    register_player("Diane Grant")
-    standings = player_standings()
+    tournament.delete_matches()
+    tournament.delete_players()
+    tournament.register_player("Bruno Walton")
+    tournament.register_player("Boots O'Neal")
+    tournament.register_player("Cathy Burton")
+    tournament.register_player("Diane Grant")
+    standings = tournament.player_standings()
     [id1, id2, id3, id4] = [row[0] for row in standings]
-    report_match(id1, id2)
-    report_match(id3, id4)
-    standings = player_standings()
+    tournament.report_match(id1, id2)
+    tournament.report_match(id3, id4)
+    standings = tournament.player_standings()
     for (i, n, w, m) in standings:
         if m != 1:
             raise ValueError("Each player should have one match recorded.")
@@ -120,17 +120,17 @@ def test_report_matches():
 
 def test_pairings():
     '''This tests to see if match pairings work properly.'''
-    delete_matches()
-    delete_players()
-    register_player("Twilight Sparkle")
-    register_player("Fluttershy")
-    register_player("Applejack")
-    register_player("Pinkie Pie")
-    standings = player_standings()
+    tournament.delete_matches()
+    tournament.delete_players()
+    tournament.register_player("Twilight Sparkle")
+    tournament.register_player("Fluttershy")
+    tournament.register_player("Applejack")
+    tournament.register_player("Pinkie Pie")
+    standings = tournament.player_standings()
     [id1, id2, id3, id4] = [row[0] for row in standings]
-    report_match(id1, id2)
-    report_match(id3, id4)
-    pairings = swiss_pairings()
+    tournament.report_match(id1, id2)
+    tournament.report_match(id3, id4)
+    pairings = tournament.swiss_pairings()
     if len(pairings) != 2:
         raise ValueError(
             "For four players, swiss_Pairings should return two pairs.")
@@ -144,7 +144,7 @@ def test_pairings():
 
 
 if __name__ == '__main__':
-    test_Delete_matches()
+    test_delete_matches()
     test_delete()
     test_count()
     test_register()
